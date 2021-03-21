@@ -1,0 +1,1 @@
+https://github.com/TheLartians/modern-wasm-starter

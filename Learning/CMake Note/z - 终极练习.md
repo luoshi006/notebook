@@ -1,0 +1,2 @@
+- 一个 cpp 工程，包含 `CMake, CI, code coverage, clang-format, reproducible dependency management and much more.` 
+	- https://github.com/TheLartians/ModernCppStarter
