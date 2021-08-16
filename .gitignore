@@ -1,8 +1,9 @@
 # tmp file
+.trash/
 .obsidian/
 
 # work file
-work
+Working
 
 # build file
 build/
