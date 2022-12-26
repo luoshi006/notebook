@@ -114,7 +114,7 @@ while not frontier.empty():
 
 将 queue 改为 priority queue 改变了边界的扩展方式。下图以轮廓线展示边界扩展方式，其中森林中运动的代价更大。
 ![[Pasted image 20210817201609.png]]
-引入 cost 会增加搜索的灵活性。ref: [[02-Implementation of A*]]
+引入 cost 会增加搜索的灵活性。ref: [[01-J 其他路径搜索算法]]
 
 ### Heuristic search 启发式搜索
 如果需要遍历地图上所有位置的路径，可以使用 BFS 和 Dijkstra 。然而，通常只需要找到一条通往目标的路径；让边界向目标扩展，而不是其他方向。首先定义启发函数：
@@ -180,7 +180,7 @@ while not frontier.empty():
 A* 权衡两个代价，只要启发函数不高估距离，A* 就会找到最佳路线。A* 使用启发函数对 Node 重新排序。
 
 ### More
-在 [[02-Implementation of A*]] 中，给出部分代码示例。
+在 [[01-J 其他路径搜索算法]] 中，给出部分代码示例。
 - 怎么选择算法
 	- Breadth First Search / Dijkstra 适用于遍历地图中的所有位置。
 		- Breadth First Search：所有地方 cost 一致
@@ -191,13 +191,5 @@ A* 权衡两个代价，只要启发函数不高估距离，A* 就会找到最�
 	- Graph 的大小
 	- queue 的排序
 
----
-# 老版
-- 最直接的路径搜索算法是 **bug 算法**，碰到障碍物后沿着障碍物走，直到再次看到目标点
-	- ![[Pasted image 20210816193515.png|400]]
-- 优化：解决上图走进陷阱的问题
-	- 保证障碍物是凸的，从而将凹形障碍物扩展为凸虚拟障碍物【仅当目标在其内部时，才进入】
-	- ![[Pasted image 20210816193955.png|400]]
-- 搜索路径通常很慢，如果地图经常变化，则通过分级简化搜索；
-
-## Algorithms
+## 其他
+- 一个路径搜索的数据集 https://www.movingai.com/benchmarks/grids.html
