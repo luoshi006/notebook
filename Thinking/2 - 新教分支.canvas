@@ -1,0 +1,12 @@
+{
+	"nodes":[
+		{"id":"960e8032a2973798","x":-394,"y":-242,"width":400,"height":157,"type":"file","file":"Thinking/img/基督教主要的支派.png"},
+		{"id":"89a8b20fb7ce837c","x":61,"y":-191,"width":319,"height":400,"type":"file","file":"Thinking/img/新教支派.webp"},
+		{"id":"97839e2f50a6ed73","x":-421,"y":409,"width":642,"height":380,"type":"file","file":"Thinking/img/新教伦理中的禁欲主义分支.jpg"},
+		{"id":"85ebafd6a17f9d99","x":482,"y":-242,"width":612,"height":582,"type":"file","file":"Thinking/img/denominational family tree.jpeg"},
+		{"id":"f0e186e6525ef426","x":350,"y":449,"width":417,"height":313,"type":"file","file":"Thinking/img/基督教会树.jpg"},
+		{"id":"737c7957e97945da","x":827,"y":493,"width":298,"height":223,"type":"file","file":"Thinking/img/政教关系.jpg"},
+		{"id":"5eee91004e61625e","x":1167,"y":-242,"width":540,"height":703,"type":"file","file":"Thinking/img/Churchs Family Tree.gif"}
+	],
+	"edges":[]
+}
