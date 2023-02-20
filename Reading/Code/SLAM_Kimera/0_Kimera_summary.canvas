@@ -1,0 +1,18 @@
+{
+	"nodes":[
+		{"id":"51b4dd557515deb4","x":-344,"y":-247,"width":170,"height":79,"color":"5","type":"text","text":"## VIO Frontend"},
+		{"id":"5df98f713458bd4f","x":-691,"y":-236,"width":200,"height":57,"color":"3","type":"text","text":"## DataProvider"},
+		{"id":"0a8056409e2b1241","x":260,"y":-232,"width":179,"height":50,"color":"2","type":"text","text":"## LcdModule"},
+		{"id":"fbc63b0cde9d041b","x":-29,"y":-77,"width":170,"height":77,"color":"5","type":"text","text":"## VIO Backend"},
+		{"id":"c0b353e12fa9ea90","x":-331,"y":175,"width":144,"height":69,"color":"1","type":"text","text":"## Mesher"},
+		{"id":"0b2d204dca715193","x":-457,"y":377,"width":598,"height":165,"color":"6","type":"text","text":"### `landmarks_`\n- 类型 `std::vector<LandmarkId>`\n- `static LandmarkId lmk_id = 0;` 为每个 `ftr` 建立全局唯一的 `id`\n- `-1` 表示 `invalid`，主要用于 `outlier`"}
+	],
+	"edges":[
+		{"id":"db8bc166176cf660","fromNode":"51b4dd557515deb4","fromSide":"bottom","toNode":"c0b353e12fa9ea90","toSide":"top"},
+		{"id":"db05aa43126c5c67","fromNode":"fbc63b0cde9d041b","fromSide":"bottom","toNode":"c0b353e12fa9ea90","toSide":"top"},
+		{"id":"7d0025a6939ddba7","fromNode":"5df98f713458bd4f","fromSide":"right","toNode":"51b4dd557515deb4","toSide":"left"},
+		{"id":"9ecadbd8a661b904","fromNode":"51b4dd557515deb4","fromSide":"right","toNode":"0a8056409e2b1241","toSide":"left"},
+		{"id":"98213be8c7fc7fa3","fromNode":"fbc63b0cde9d041b","fromSide":"right","toNode":"0a8056409e2b1241","toSide":"bottom"},
+		{"id":"63f2c7812e84ac31","fromNode":"51b4dd557515deb4","fromSide":"bottom","toNode":"fbc63b0cde9d041b","toSide":"left","label":"预积分 Bias"}
+	]
+}

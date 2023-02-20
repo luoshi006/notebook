@@ -1,0 +1,60 @@
+#### `StereoVisionImuFrontend::nominalSpinStereo`
+```
+## 帧间预积分、光流 Tracking;
+	若 Keyframe，计算帧间位姿，检测 ftr，更新 3D pts
+- preintegrateImuMeasurements()      // 预积分 pim
+	- 根据 IMU 帧间 R = pim->deltaRij()，计算左目的帧间 R
+- processStereoFrame()
+	- tracker_->featureTracking()    // 从参考帧加载 landmarks_, KLT Tracking，没追上的删除，追上的更新
+		- optical_flow_predictor_->predictSparseFlow()  // 像素平面间的转换，TODO: 没有考虑畸变
+		- cv::calcOpticalFlowPyrLK()
+		- UndistortKeypointAndGetVersor()               // 畸变校正并计算 versor
+	- tracker_->getTrackerImage()    // 绘制 ftr 用于显示，新 ftr 红色，追踪 ftr 绿色带箭头
+	- if 关键帧                       // 有一个简单的关键帧策略
+		- outlierRejectionMono()    // RANSAC 计算帧间位姿
+			- 2-point RANSAC.
+				- tracker_->geometricOutlierRejectionMonoGivenRotation()
+					- findMatchingKeypoints()
+					- mono_ransac_given_rot_.computeModel(0)
+						- 求解模型 opengv::sac_problems::relative_pose::TranslationOnlySacProblem
+						- <Robust Real-Time Visual Odometry with a Single Camera and an IMU>
+					- removeOutliersMono()
+						- findOutliers()
+						- remove outliers
+					- computeMedianDisparity()    // 计算特征点 视差 中位数，判断 <LOW_DISPARITY>，添加 ZUPT
+			- 5-point RANSAC.
+				- tracker_->geometricOutlierRejectionMono()
+					- findMatchingKeypoints()
+					- mono_ransac_.computeModel(0)
+					   - 求解模型 opengv::sac_problems::relative_pose::CentralRelativePoseSacProblem
+					   - Nister 5 pts <An Efficient Solution to the Five-Point Relative Pose Problem>
+					- removeOutliersMono()
+					- computeMedianDisparity()
+		- stereo_matcher_.sparseStereoReconstruction()    // 左右目畸变校正、特征点匹配，伪亚像素优化，计算 3D 点；
+		- outlierRejectionStereo
+			- if 有旋转
+				- tracker_->geometricOutlierRejectionStereoGivenRotation()    // 1-point RANSAC.
+					- findMatchingStereoKeypoints()
+					- // Get reference vector and covariance
+						- // 反投影双目匹配点，并计算 Jacobian，返回 左目 frame 的 3D point
+						- stereoPtCov = Matrix3::Identity(); // 3 px std in each direction
+					- // Get current  vectors and covariance
+						- // 当前帧 pt 的 3D point 并转到 lkf frame [k-1]
+					- 根据 Mahalanobis Distance 抛野值
+						- v: 残差， O: 残差协方差
+						- dinv: cov 行列式的倒数, innovationMahalanobisNorm: res‘ * cov ^(-1) * res
+					- removeOutliersStereo()
+					- 加权平均计算 t
+					- 返回结果：[R_imu, t]
+			- else 
+				- tracker_->geometricOutlierRejectionStereo()                 // 3-point RANSAC.
+					- 求解模型: opengv::sac_problems::point_cloud::PointCloudSacProblem 点云匹配
+					- stereo_ransac_.computeModel(0)
+					- removeOutliersStereo
+					- 返回结果：a 3x4 matrix [R t].
+		- feature_detector_->featureDetection()
+		- stereo_matcher_.sparseStereoReconstruction()
+		- stereoFrame_k_->checkStatusRightKeypoints()
+		- getSmartStereoMeasurements()
+- return
+```

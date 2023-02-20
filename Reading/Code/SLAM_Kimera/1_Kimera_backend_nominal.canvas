@@ -1,0 +1,38 @@
+{
+	"nodes":[
+		{"id":"3b53edbf7b931bc1","x":-410,"y":-663,"width":564,"height":124,"color":"1","type":"text","text":"## `addVisualInertialStateAndOptimize()`\n```cpp\nis_smoother_ok = addVisualInertialStateAndOptimize(...)\n```"},
+		{"id":"cc7b408abdd1d1fa","x":486,"y":-433,"width":215,"height":60,"color":"3","type":"text","text":"### `addImuValues()`"},
+		{"id":"848195e7584427f7","x":466,"y":-453,"width":1793,"height":670,"color":"#f8df3f","type":"group","label":"IMU Measurements"},
+		{"id":"4b0f7ab0ec9418f7","x":1309,"y":-331,"width":883,"height":426,"color":"2","type":"group","label":"PreintegratedCombinedMeasurements"},
+		{"id":"f5444c8c977ef2f2","x":1329,"y":-303,"width":513,"height":269,"type":"file","file":"Reading/Code/SLAM_Kimera/img/PreintegratedCombinedMeasurements.png"},
+		{"id":"0fabd7c3fee91618","x":1329,"y":-34,"width":471,"height":93,"type":"text","text":"- 相对 `ImuFactor`，考虑 `Bias` 的随机游走\nrefs: https://zhuanlan.zhihu.com/p/337530440"},
+		{"id":"3d4469b3ff8e2b91","x":1903,"y":-274,"width":244,"height":211,"type":"file","file":"Reading/Code/SLAM_Kimera/img/6-ways factor.png"},
+		{"id":"d8aeebb6d2f9d592","x":594,"y":-373,"width":296,"height":109,"color":"#c8c800","type":"text","text":"- `pim.predict()`\n\t- 预积分更新\n\t- 结果插入 `new_values_`"},
+		{"id":"57744da56d18ff64","x":486,"y":-264,"width":215,"height":60,"color":"3","type":"text","text":"### `addImuFactor()`"},
+		{"id":"3077db934d70d090","x":594,"y":-204,"width":465,"height":230,"color":"#c8c800","type":"text","text":"- `new_imu_prior_and_other_factors_`\n- 根据参数选择插入 `ImuFactor` 类型：\n\t- ==6-ways factor==`gtsam::CombinedImuFactor`\n\t- ==5-ways factor==`gtsam::ImuFactor`\n- 添加 `Bias` 先验，初值为 `0` \n\t- `gtsam::imuBias::ConstantBias`"},
+		{"id":"3e49a066713b0e49","x":484,"y":305,"width":516,"height":108,"color":"4","type":"text","text":"### `addStereoMeasurementsToFeatureTracks()`\n- 新匹配点用于更新 `landmarks_kf` 和 `feature_tracks_` "},
+		{"id":"036b292e126cb5d4","x":464,"y":285,"width":1241,"height":1049,"color":"#c1fbcf","type":"group","label":"Vision Measurements"},
+		{"id":"33895e19aee62d72","x":484,"y":413,"width":258,"height":68,"color":"4","type":"text","text":"### ZUPT"},
+		{"id":"346596d9763b10f4","x":486,"y":26,"width":265,"height":56,"color":"3","type":"text","text":"### `addBetweenFactor()`"},
+		{"id":"d0e7fd86b10adb67","x":594,"y":82,"width":465,"height":115,"color":"#c8c800","type":"text","text":"- `new_imu_prior_and_other_factors_`\n- 添加帧间 `Factor`\n\t- `gtsam::BetweenFactor<gtsam::Pose3>`"},
+		{"id":"39d3b3123179c5f5","x":613,"y":481,"width":425,"height":133,"color":"#b3f9ee","type":"text","text":"#### `addZeroVelocityPrior()`\n- `new_imu_prior_and_other_factors_`\n- 添加 `PriorFactor`，速度置零"},
+		{"id":"1cefddb999a87de4","x":613,"y":614,"width":425,"height":153,"color":"#b3f9ee","type":"text","text":"#### `addNoMotionFactor()`\n- `new_imu_prior_and_other_factors_`\n- 添加 `gtsam::BetweenFactor` ，帧间位姿变化为零"},
+		{"id":"9bef9659172835e6","x":484,"y":767,"width":308,"height":50,"color":"4","type":"text","text":"### `addLandmarksToGraph()`"},
+		{"id":"31c0c350f1c9b8d8","x":864,"y":1118,"width":731,"height":181,"color":"#b3f9ee","type":"text","text":"#### `updateLandmarkInGraph()`\n- `old_smart_factors_`\n- 把最后一个 `FeatureTrack` 作为观测添加到已有的 `SmartStereoFactor`，重新插入 `old_smart_factors_` \n- 通过 `slot` 判断 `factor` 是否已经插入 `graph` "},
+		{"id":"458f0aa52e4e545b","x":1396,"y":1380,"width":343,"height":109,"color":"1","type":"text","text":"#### `Slot`\n- 表示 `lmk` 在 `graph` 中的位置 `idx`"},
+		{"id":"20a3e9b9e5e2e2de","x":864,"y":879,"width":731,"height":168,"color":"#b3f9ee","type":"text","text":"#### `addLandmarkToGraph()`\n- `new_smart_factors_` \n- 遍历 `LandmarkId` 对应的所有 `FeatureTrack` ，作为观测添加到 `SmartStereoFactor`\n- 将 `SmartStereoFactor` 插入 `new_smart_factors_`"},
+		{"id":"ce14f4f107bde49b","x":464,"y":1380,"width":816,"height":1027,"color":"6","type":"text","text":"### `optimize()`\n- ==landmarkId -> {SmartFactorPtr}== `new_smart_factors_` 遍历\n\t- `slot == -1` 第一次观测到的 LMK，直接添加到 `new_factors_tmp`\n\t- `slot != -1`\n\t\t- `smoother_->getFactors().exists(slot)`\n\t\t\t- `delete_slots.push_back(slot);`\n\t\t\t- `new_factors_tmp.push_back()`\n\t\t\t- `lmk_ids_of_new_smart_factors_tmp`\n\t\t- else\n\t\t\t- `old_smart_factors_.erase()`\n\t\t\t- `deleteLmkFromFeatureTracks`\n- 在 `new_factors_tmp` 中添加 `new_imu_prior_and_other_factors_`\n\n- ==iSAM update== `updateSmoother()` \n\t- `cheirality` 是多视图几何中代表着 `3D` 点的正景深约束\n\t- `smoother_->update()` \n\t- `if got_cheirality_exception`\n\t\t- `cleanCheiralityLmk()`\n\t\t\t- `deleteAllFactorsWithKeyFromFactorGraph()`\n\t\t\t- `deleteKeyFromValues()`\n\t\t\t- `deleteKeyFromTimestamps()`\n\t\t\t- `delete_slots_cheirality->insert()`\n\t\t\t- `deleteLmkFromFeatureTracks()`\n\t\t\t- `deleteLmkFromExtraStructures()`\n\t\t- `updateSmoother()` 递归调用，直到删光\n- `updateNewSmartFactorsSlots()`\n\t- `smoother_->getISAM2Result()` \n- ==max_extra_iterations== `updateSmoother()` \n- `updateStates()`\n\t- `smoother_->calculateEstimate()` \n\t- 图里只有 `prior` 先验，所以没有变化\n- `computeStateCovariance()` \n\t- 调整 `Cov` 顺序，保证稀疏性；计算 Marginal Covariance Matrix"}
+	],
+	"edges":[
+		{"id":"efd3d908f66173d9","fromNode":"3b53edbf7b931bc1","fromSide":"right","toNode":"cc7b408abdd1d1fa","toSide":"top"},
+		{"id":"bd98ec73dbb3a39c","fromNode":"cc7b408abdd1d1fa","fromSide":"left","toNode":"57744da56d18ff64","toSide":"left"},
+		{"id":"b5b385b4048bfe31","fromNode":"57744da56d18ff64","fromSide":"left","toNode":"346596d9763b10f4","toSide":"left"},
+		{"id":"25edb0f2b4d39d3f","fromNode":"346596d9763b10f4","fromSide":"left","toNode":"3e49a066713b0e49","toSide":"left"},
+		{"id":"91174cc4c81cecab","fromNode":"3e49a066713b0e49","fromSide":"left","toNode":"33895e19aee62d72","toSide":"left"},
+		{"id":"a871082e05a05dc7","fromNode":"33895e19aee62d72","fromSide":"left","toNode":"9bef9659172835e6","toSide":"left"},
+		{"id":"a78fba655c3ef801","fromNode":"9bef9659172835e6","fromSide":"left","toNode":"ce14f4f107bde49b","toSide":"left"},
+		{"id":"a0c6291833a55da8","fromNode":"3077db934d70d090","fromSide":"right","toNode":"4b0f7ab0ec9418f7","toSide":"left"},
+		{"id":"9f0ca2c9c1769cd5","fromNode":"9bef9659172835e6","fromSide":"bottom","toNode":"20a3e9b9e5e2e2de","toSide":"left","color":"4","label":"! in_ba_graph_"},
+		{"id":"b7dc2fb4440c9213","fromNode":"9bef9659172835e6","fromSide":"bottom","toNode":"31c0c350f1c9b8d8","toSide":"left","color":"4","label":"in_ba_graph_"}
+	]
+}

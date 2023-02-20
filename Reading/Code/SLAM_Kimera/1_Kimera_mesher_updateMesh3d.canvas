@@ -1,0 +1,33 @@
+{
+	"nodes":[
+		{"id":"2e12218c4901c5ec","x":-376,"y":-246,"width":228,"height":73,"color":"1","type":"text","text":"## `updateMesh3D`"},
+		{"id":"cb85871b951009a5","x":-608,"y":-173,"width":465,"height":121,"type":"text","text":"```cpp\npoints_with_id_VIO    // backend landmark\npoints_with_id_stereo // cur frame point3d\npoints_with_id_all    // (VIO) + stereo\n```"},
+		{"id":"1a75198888619710","x":-31,"y":-52,"width":458,"height":56,"color":"4","type":"text","text":"### `appendNonVioStereoPoints`"},
+		{"id":"a805584e459d2aa1","x":427,"y":4,"width":472,"height":115,"color":"5","type":"text","text":"- `points_with_id_stereo`\n- 将当前帧左目 `keypoints_3d` 转到 `Global` 坐标系"},
+		{"id":"d43ee69c97f42690","x":427,"y":177,"width":421,"height":66,"color":"5","type":"text","text":"- 遍历 `points_with_id_all`，取出有效的点"},
+		{"id":"d7826ff2df5d14b0","x":427,"y":276,"width":421,"height":101,"color":"5","type":"text","text":"### `createMesh2dImpl` \n- delaunay triangulation"},
+		{"id":"05338ff68ae910a7","x":941,"y":377,"width":364,"height":50,"color":"3","type":"text","text":"#### `subdiv.initDelaunay(rect)`"},
+		{"id":"3ad76fd3f71dd049","x":941,"y":451,"width":482,"height":50,"color":"3","type":"text","text":"#### `subdiv.insert(keypoints_inside_image)`"},
+		{"id":"e9e477568e3a431b","x":941,"y":524,"width":405,"height":50,"color":"3","type":"text","text":"#### `subdiv.getTriangleList(tri_2d)`"},
+		{"id":"b65dfe5abfd46b40","x":941,"y":609,"width":618,"height":50,"color":"3","type":"text","text":"遍历`tri_2d` ，将顶点都在图像内的三角插入 `good_triangulation` 并返回"},
+		{"id":"f6331d27a1e678d2","x":-31,"y":119,"width":458,"height":58,"color":"4","type":"text","text":"### `createMesh2dVIO`"},
+		{"id":"7f9649d37a3d5ffa","x":-31,"y":659,"width":458,"height":59,"color":"4","type":"text","text":"### `populate3dMeshTimeHorizon`"},
+		{"id":"085f49f2a1cd99c2","x":427,"y":718,"width":421,"height":62,"color":"5","type":"text","text":"### `populate3dMesh` "},
+		{"id":"f90813988f3cd614","x":941,"y":780,"width":758,"height":363,"color":"3","type":"text","text":"- 遍历三角 `mesh_2d_pixels`  \n\t- 遍历每个三角 `triangle_2d` 上的三个顶点\n\t\t- 通过 `pixel` 找到对应的 `LandmarkId` \n\t\t- 通过 `LandmarkId` 找到 `points_with_id_map` 中的对应 3D 点\n\t\t- 以 3D 点 构建 `Mesh2D::Polygon face` 和 `Mesh3D::Polygon` \n\t\t- 检查 `Mesh` 质量 `isBadTriangle`\n\t\t\t- 比例失调 `minSide / maxSide ` \n\t\t\t- 相机坐标系下的视角检查\n\t\t\t- 有边太长 `sideLen < max_triangle_side`\n\t\t- `mesh_3d_.addPolygonToMesh(polygon)`\n\t\t- `mesh_2d->addPolygonToMesh(face)` "},
+		{"id":"0750e75321c930a6","x":427,"y":1143,"width":463,"height":137,"color":"5","type":"text","text":"### `updatePolygonMeshToTimeHorizon` \n- 使用后端的 `points_with_id_map` 更新 3D 点位姿\n- 删除一些视角不好的 三角"},
+		{"id":"cc7c27f0f22f7a7f","x":-31,"y":1280,"width":458,"height":161,"color":"4","type":"text","text":"### `mesh_3d_.computePerVertexNormals()`\n- 默认不执行，用于显示\n- 遍历每个三角，计算 `face` 法向量\n- 更新三个顶点上的 **法向量均值**"}
+	],
+	"edges":[
+		{"id":"f4dc0ccec597ddf2","fromNode":"2e12218c4901c5ec","fromSide":"right","toNode":"1a75198888619710","toSide":"top","color":"1"},
+		{"id":"1b99666d2f995b14","fromNode":"1a75198888619710","fromSide":"bottom","toNode":"f6331d27a1e678d2","toSide":"top","color":"1"},
+		{"id":"efe6e73a945aea18","fromNode":"f6331d27a1e678d2","fromSide":"bottom","toNode":"7f9649d37a3d5ffa","toSide":"top","color":"1"},
+		{"id":"64a266e6bfab67b1","fromNode":"7f9649d37a3d5ffa","fromSide":"bottom","toNode":"cc7c27f0f22f7a7f","toSide":"top","color":"1"},
+		{"id":"bc0514aeeee5bd36","fromNode":"d43ee69c97f42690","fromSide":"bottom","toNode":"d7826ff2df5d14b0","toSide":"top"},
+		{"id":"e14cded3f8f37d65","fromNode":"d7826ff2df5d14b0","fromSide":"right","toNode":"05338ff68ae910a7","toSide":"left","color":"5"},
+		{"id":"023ff7a62aea14ea","fromNode":"05338ff68ae910a7","fromSide":"right","toNode":"3ad76fd3f71dd049","toSide":"right","color":"3"},
+		{"id":"e12d43212bd4aceb","fromNode":"3ad76fd3f71dd049","fromSide":"right","toNode":"e9e477568e3a431b","toSide":"right","color":"2"},
+		{"id":"eda723f4c9a4c439","fromNode":"e9e477568e3a431b","fromSide":"right","toNode":"b65dfe5abfd46b40","toSide":"right","color":"3"},
+		{"id":"0b03c1ed8d704a6c","fromNode":"085f49f2a1cd99c2","fromSide":"right","toNode":"f90813988f3cd614","toSide":"left","color":"5"},
+		{"id":"e6ca18930efe09a8","fromNode":"f90813988f3cd614","fromSide":"left","toNode":"0750e75321c930a6","toSide":"top","color":"4"}
+	]
+}

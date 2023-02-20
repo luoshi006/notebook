@@ -1,0 +1,6 @@
+{
+	"nodes":[
+		{"id":"bb99413d062f7b1e","x":-596,"y":-808,"width":1188,"height":1617,"color":"3","type":"file","file":"Reading/Code/SLAM_Kimera/rsc/stereo_imu_frontend_nominal_spin_stereo.md","subpath":"#`StereoVisionImuFrontend::nominalSpinStereo`"}
+	],
+	"edges":[]
+}

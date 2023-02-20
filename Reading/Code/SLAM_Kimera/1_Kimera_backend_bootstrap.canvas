@@ -1,0 +1,18 @@
+{
+	"nodes":[
+		{"id":"7ecca08c31f67220","x":-412,"y":-133,"width":470,"height":50,"color":"1","type":"text","text":"## `VioBackend::initializeBackend`"},
+		{"id":"d01de78bb3123635","x":159,"y":-20,"width":250,"height":56,"color":"2","type":"text","text":"### `initializeFromIMU`"},
+		{"id":"dea4c122a27e112e","x":159,"y":-269,"width":250,"height":60,"color":"2","type":"text","text":"### `initializeFromGt`"},
+		{"id":"c60dd3b1d5ee3467","x":677,"y":-20,"width":484,"height":275,"color":"3","type":"text","text":"### `getInitialStateEstimate`==初始对准==\n- 静止状态下获取 IMU 均值数据\n- `guessPoseFromImuMeasurements()`\n\t- `AlignGravityVectors()`\n\t\t- `R=1` \n\t\t- `roll=pi, pitch=0, yaw=any`  鬼畜对齐\n\t\t- ==Gtsam== `AlignPair` [有点复杂]\n\t\t\t- 叉乘获得转轴，再计算旋转角度"},
+		{"id":"6a6dbfa6bba97d21","x":449,"y":422,"width":940,"height":480,"color":"6","type":"text","text":"## PX4 初始对准\n- `initialiseTilt` https://github.com/PX4/PX4-Autopilot/blob/main/src/modules/ekf2/EKF/ekf.cpp#L217\n```cpp\nconst float accel_norm = _accel_lpf.getState().norm();\nconst float gyro_norm = _gyro_lpf.getState().norm();\n\nif (accel_norm < 0.8f * CONSTANTS_ONE_G ||\n\taccel_norm > 1.2f * CONSTANTS_ONE_G ||\n\tgyro_norm > math::radians(15.0f)) {\n\treturn false;\n}\n\n// get initial roll and pitch estimate from delta velocity vector, assuming vehicle is static\nconst Vector3f gravity_in_body = _accel_lpf.getState().normalized();\nconst float pitch = asinf(gravity_in_body(0));\nconst float roll = atan2f(-gravity_in_body(1), -gravity_in_body(2));\n\n_state.quat_nominal = Quatf{Eulerf{roll, pitch, 0.0f}};\n```"},
+		{"id":"4a7cf0ee0c72035a","x":1387,"y":-643,"width":681,"height":808,"color":"4","type":"text","text":"### `initStateAndSetPriors`\n- `addInitialPriorFactors()`\n\t- 设置初值 `state` + `cov`   -> `PriorFactor`\n\t- `new_imu_prior_and_other_factors_.push_back(初值)`\n- `optimize()`\n\t- ==landmarkId -> {SmartFactorPtr}== `new_smart_factors_` 此时应该是空的\n\t- 在 `NonlinearFactorGraph` 中添加 `new_imu_prior_and_other_factors_`\n\t- ==iSAM update== `updateSmoother()` \n\t\t- `cheirality` 是多视图几何中代表着 `3D` 点的正景深约束\n\t\t- `smoother_->update()` \n\t\t- `if got_cheirality_exception`\n\t\t\t- `cleanCheiralityLmk()`\n\t\t\t\t- `deleteAllFactorsWithKeyFromFactorGraph()`\n\t\t\t\t- `deleteKeyFromValues()`\n\t\t\t\t- `deleteKeyFromTimestamps()`\n\t\t\t\t- `delete_slots_cheirality->insert()`\n\t\t\t\t- `deleteLmkFromFeatureTracks()`\n\t\t\t\t- `deleteLmkFromExtraStructures()`\n\t\t\t- `updateSmoother()` 递归调用，直到删光\n\t- `updateNewSmartFactorsSlots()`\n\t\t- `smoother_->getISAM2Result()` \n\t- ==max_extra_iterations== `updateSmoother()` \n\t- `updateStates()`\n\t\t- `smoother_->calculateEstimate()` \n\t\t- 图里只有 `prior` 先验，所以没有变化\n\t- `computeStateCovariance()` \n\t\t- 调整 `Cov` 顺序，保证稀疏性；计算 Marginal Covariance Matrix"}
+	],
+	"edges":[
+		{"id":"5e6ca5b6ca3f4624","fromNode":"7ecca08c31f67220","fromSide":"right","toNode":"dea4c122a27e112e","toSide":"left","color":"4"},
+		{"id":"fec4fba29ec91a2a","fromNode":"7ecca08c31f67220","fromSide":"right","toNode":"d01de78bb3123635","toSide":"left","color":"1"},
+		{"id":"50b0e68d1ed08cf4","fromNode":"d01de78bb3123635","fromSide":"right","toNode":"c60dd3b1d5ee3467","toSide":"left","color":"1"},
+		{"id":"5fdfa2f9a090f1c1","fromNode":"c60dd3b1d5ee3467","fromSide":"right","toNode":"4a7cf0ee0c72035a","toSide":"left","color":"1"},
+		{"id":"75638efddad42d95","fromNode":"dea4c122a27e112e","fromSide":"right","toNode":"4a7cf0ee0c72035a","toSide":"left","color":"4"},
+		{"id":"6659af89bc1f3b16","fromNode":"c60dd3b1d5ee3467","fromSide":"bottom","toNode":"6a6dbfa6bba97d21","toSide":"top","label":"替换方案"}
+	]
+}
