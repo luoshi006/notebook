@@ -1,0 +1,7 @@
+{
+	"nodes":[
+		{"id":"1d9f904325e98fb9","x":-81,"y":0,"width":1127,"height":703,"type":"link","url":"http://dfz.shaanxi.gov.cn/sqzlk/xbsxsz/szdyl/yandiz/"},
+		{"id":"5ff851cb640b9591","x":-1225,"y":0,"width":1034,"height":655,"type":"link","url":"https://zh.wikipedia.org/zh/%E5%8F%A4%E7%BE%8C%E4%BA%BA"}
+	],
+	"edges":[]
+}

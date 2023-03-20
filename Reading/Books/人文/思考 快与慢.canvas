@@ -1,0 +1,15 @@
+{
+	"nodes":[
+		{"type":"file","file":"Reading/Books/人文/img/THE TWO SYSTEMS.png","id":"f618df3b9374a903","x":-260,"y":-140,"width":554,"height":280},
+		{"type":"file","file":"Reading/Books/人文/img/Thinking, Fast and Slow. Daniel Kahneman. Allen Lane..png","id":"36edc374d58137f2","x":-740,"y":-400,"width":273,"height":400},
+		{"type":"file","file":"Reading/Books/人文/img/The 2 Systems.png","id":"ba370f6946ff46ae","x":-260,"y":-460,"width":500,"height":252},
+		{"type":"file","file":"Reading/Books/人文/img/HEURISTICS AND BIASES.png","id":"fd5723a11d1c6da7","x":620,"y":260,"width":400,"height":178},
+		{"type":"file","file":"Reading/Books/人文/img/Heuristics and How System 1 Works.png","id":"f0344ed388030751","x":620,"y":30,"width":400,"height":110},
+		{"type":"file","file":"Reading/Books/人文/img/Heuristics Cause Biases & Errors.png","id":"0c02284671ca3a6b","x":1140,"y":30,"width":400,"height":187},
+		{"type":"file","file":"Reading/Books/人文/img/Heuristics Cause Overconfidence.png","id":"83e3feb271a2ac22","x":1680,"y":30,"width":400,"height":142},
+		{"type":"file","file":"Reading/Books/人文/img/Heuristics Affect Choices.png","id":"09fd7450cf5f25d8","x":2220,"y":30,"width":400,"height":122},
+		{"type":"file","file":"Reading/Books/人文/img/The Fourfold Pattern of Preferences.png","id":"4573b509b4a5ea89","x":2720,"y":34,"width":400,"height":118},
+		{"id":"7c56ef4862c53cd9","x":-1022,"y":117,"width":642,"height":243,"type":"text","text":"## Refs\n- https://readingraphics.com/book-summary-thinking-fast-and-slow/\n- https://dansilvestre.com/thinking-fast-and-slow-summary/"}
+	],
+	"edges":[]
+}
